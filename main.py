@@ -10,10 +10,10 @@ import json
 app = FastAPI(title="BFHL API")
 
 # ---- User Details (env fallback) ----
-FULL_NAME = os.getenv("FULL_NAME", "John Doe")
-DOB = os.getenv("DOB", "17091999")          # ddmmyyyy
-EMAIL = os.getenv("EMAIL", "john@xyz.com")
-ROLL_NUMBER = os.getenv("ROLL_NUMBER", "ABCD123")
+FULL_NAME = os.getenv("FULL_NAME", "Rasika Phutane")
+DOB = os.getenv("DOB", "18092004")          # ddmmyyyy
+EMAIL = os.getenv("EMAIL", "rasikaphuxxx@gmail.com")
+ROLL_NUMBER = os.getenv("ROLL_NUMBER", "22BCE1322")
 
 def normalize_full_name(name: str) -> str:
     """Normalize a name: lowercase, replace spaces with underscores, strip invalid chars."""
