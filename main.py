@@ -8,8 +8,6 @@ from pydantic import BaseModel
 
 app = FastAPI(title="BFHL API")
 
-# ----- CONFIG (via environment variables) -----
-# FULL_NAME can be "John Doe" or "john_doe" — it's normalized to lowercase + underscores.
 FULL_NAME = os.getenv("FULL_NAME", "john doe")
 DOB = os.getenv("DOB", "17091999")          # ddmmyyyy
 EMAIL = os.getenv("EMAIL", "john@xyz.com")
@@ -26,13 +24,9 @@ def normalize_full_name(name: str) -> str:
 
 USER_ID = f"{normalize_full_name(FULL_NAME)}_{DOB}"
 
-
-# ----- Pydantic model -----
 class InputData(BaseModel):
     data: List[Any]
 
-
-# ----- Helper logic -----
 _digits_re = re.compile(r"^-?\d+$")
 
 
