@@ -3,6 +3,9 @@ import re
 from typing import Any, List
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
+from fastapi.responses import HTMLResponse
+import json
+
 
 app = FastAPI(title="BFHL API")
 
@@ -91,18 +94,58 @@ def bfhl_post(payload: InputData):
         **processed,
     }
 
-@app.get("/bfhl")
-def bfhl_get():
-    """GET: For browser testing & submission link"""
-    return {
-        "status": 200,
-        "message": "BFHL API is live 🚀. Use POST /bfhl with JSON body { \"data\": [ ... ] }",
-        "example": {
-            "data": ["1", "2", "abc", "XYZ", "#$%"]
-        },
-        "docs": "/docs",
-        "health": "/health"
-    }
+@app.get("/bfhl", response_class=HTMLResponse)
+def bfhl_ui():
+    """Simple HTML UI for testing the API."""
+    return """
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>BFHL API Tester</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 40px; }
+            h1 { color: #2c3e50; }
+            input, button { padding: 8px; margin: 5px 0; }
+            #response { margin-top: 20px; padding: 10px; border: 1px solid #ddd; background: #f9f9f9; }
+            textarea { width: 100%; height: 200px; }
+        </style>
+    </head>
+    <body>
+        <h1>🚀 BFHL API Tester</h1>
+        <p>Enter comma-separated values (e.g., <code>1, 2, abc, XYZ, #$%</code>)</p>
+        
+        <input type="text" id="dataInput" size="50" placeholder="Enter values here" />
+        <br>
+        <button onclick="sendRequest()">Send to API</button>
+        
+        <h2>Response:</h2>
+        <div id="response"><i>No request made yet.</i></div>
+        
+        <script>
+            async function sendRequest() {
+                const input = document.getElementById("dataInput").value;
+                const dataArray = input.split(",").map(x => x.trim());
+                
+                const responseDiv = document.getElementById("response");
+                responseDiv.innerHTML = "<i>Loading...</i>";
+                
+                try {
+                    const res = await fetch("/bfhl", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify({ data: dataArray })
+                    });
+                    const json = await res.json();
+                    responseDiv.innerHTML = "<textarea readonly>" + JSON.stringify(json, null, 2) + "</textarea>";
+                } catch (err) {
+                    responseDiv.innerHTML = "<b style='color:red'>Error:</b> " + err;
+                }
+            }
+        </script>
+    </body>
+    </html>
+    """
 
 @app.get("/")
 def root():
