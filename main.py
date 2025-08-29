@@ -1,15 +1,19 @@
 import os
 import re
 from typing import Any, List
-
 from fastapi import FastAPI, HTTPException
+
 from pydantic import BaseModel
 
 app = FastAPI(title="BFHL API")
 
+<<<<<<< HEAD
 # ----- CONFIG (via environment variables) -----
 # FULL_NAME can be "John Doe" or "john_doe" — it's normalized to lowercase + underscores.
 FULL_NAME = os.getenv("FULL_NAME", "John Doe")
+=======
+FULL_NAME = os.getenv("FULL_NAME", "john doe")
+>>>>>>> 96758b646040c93b295a04b32ce9474aa55c364a
 DOB = os.getenv("DOB", "17091999")          # ddmmyyyy
 EMAIL = os.getenv("EMAIL", "john@xyz.com")
 ROLL_NUMBER = os.getenv("ROLL_NUMBER", "ABCD123")
@@ -25,14 +29,16 @@ def normalize_full_name(name: str) -> str:
 
 USER_ID = f"{normalize_full_name(FULL_NAME)}_{DOB}"
 
-
-# ----- Pydantic model -----
 class InputData(BaseModel):
     data: List[Any]
 
+<<<<<<< HEAD
 
 # ----- Helper logic -----
 _digits_re = re.compile(r"^-?\d+$")  # integer regex (handles negatives)
+=======
+_digits_re = re.compile(r"^-?\d+$")
+>>>>>>> 96758b646040c93b295a04b32ce9474aa55c364a
 
 
 def process_payload(data_list: List[Any]):
